@@ -1,0 +1,25 @@
+<div class="listContainer">
+
+  <table class="table">
+    <tr class="firstRow">
+      <td style="font-size:25px;color:black">Title</td>
+      <td style="font-size:25px;color:black">Content</td>
+      <td style="width:25px;"></td>
+    </tr>
+
+    <tr class="list" *ngFor="let list of todos ; let l = last" [@myTrigger]="'getState(l)'">
+
+      <th contenteditable (blur)="onBlur($event,list)">{{list.title}}</th>
+      <th contenteditable (blur)="onBlur($event,list)">{{list.content}}</th>
+
+      <th>
+        <input id="checkBox" class="regular-radio"   id="radio-2-1" type="checkbox" [(checked)]="list.done" (change)="ToggleChecked(list.id)">
+      </th>
+
+    </tr>
+
+  </table>
+  <div>
+  </div>
+
+</div>
