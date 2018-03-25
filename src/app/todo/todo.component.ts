@@ -28,17 +28,8 @@ export class TodoComponent {
       type: actions.GET_MANAGE_LIST,
     })
 
-
-    // this.getTodo();
     this.ngRedux.subscribe(() => {
       this.title = this.ngRedux.getState().list.list.title;
     })
   }
-
-
-  getTodo() {
-
-  }
-
-
 }

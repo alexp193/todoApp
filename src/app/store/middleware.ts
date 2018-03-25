@@ -49,7 +49,6 @@ export class ProjectsMiddleware {
                     }, error => console.log('Could not update todo.'));
 
                 break;
-
             case actions.DELETE_ITEMS:
                 this.http.delete(`http://localhost:3000/todos/${action.todo.id}`)
                     .subscribe((response) => {
@@ -60,9 +59,7 @@ export class ProjectsMiddleware {
                             })
                         });
                     });
-
                 break;
-
             default:
                 return next(action);
         }

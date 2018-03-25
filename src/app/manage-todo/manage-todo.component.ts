@@ -20,15 +20,13 @@ export class ManageTodoComponent implements OnInit {
 
 
 
-  getLists() {
+  getLists(): void {
     this.ngRedux.subscribe(() => {
-    console.log('manage', this.ngRedux.getState().list.list);
-    
       this.lists = this.ngRedux.getState().list && isArray(this.ngRedux.getState().list.list) ? this.ngRedux.getState().list.list : this.lists;
     })
   }
 
-  executeList(list) {
+  executeList(list: object): void {
     this.ngRedux.dispatch({ type: actions.SHOW_TODOS_ITEMS, payload: list });
   }
 

@@ -37,13 +37,12 @@ export class TodoListComponent implements OnInit {
 
   }
 
-  onBlur(e, item, keyV) {
+  onBlur(e, item, keyV): void {
     item[keyV] = e.target.innerHTML;
     this.ngRedux.dispatch({ type: actions.UPDATE_LIST, todo: item });
   }
 
-  getTodos() {
-
+  getTodos(): void {
     this.ngRedux.subscribe(() => {
       const newList = this.ngRedux.getState().todos.todos;
       this.listId = this.ngRedux.getState().list.list.id;
@@ -52,7 +51,7 @@ export class TodoListComponent implements OnInit {
     })
   }
 
-  ToggleChecked(id) {
+  ToggleChecked(id: number): any {
     let obj = this.todos.find(item => {
       if (item.id === id) {
         item.done = !item.done;

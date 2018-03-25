@@ -14,14 +14,14 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
   styleUrls: ['./todo-form.component.css']
 })
 export class TodoFormComponent implements OnInit {
-  //@select() todos;
+
   public todos: Todos[];
-  private parentId:number;
+  private listId: number;
   todoForm: FormGroup;
 
 
-  model: Todos = {
-    parentId:0,
+  public model: Todos = {
+    parentId: 0,
     id: 0,
     title: "",
     content: "",
@@ -31,41 +31,36 @@ export class TodoFormComponent implements OnInit {
 
   constructor(private ngRedux: NgRedux<IAppState>, private fb: FormBuilder) { }
 
-  DeleteItems() {
+  DeleteItems(): void {
     for (var i = 0; i < this.todos.length; i++) {
       if (this.todos[i].done) {
         this.ngRedux.dispatch({ type: actions.DELETE_ITEMS, todo: this.todos[i] });
       }
     }
-
-    // this.ngRedux.dispatch({
-    //   type: actions.GET_LIST,
-    // })
-
+    this.todoForm.reset();
   }
 
-  getTodos() {
+  getTodos(): void {
     this.ngRedux.subscribe(() => {
       this.todos = this.ngRedux.getState().todos.todos;
-
+      this.listId = this.ngRedux.getState().list.list.id;
     })
   }
 
-  onSubmit({ value, valid }) {
+  onSubmit({ value, valid }): void {
     this.model.content = value.content;
     this.model.title = value.title;
+    this.model.parentId = this.listId;
     this.ngRedux.dispatch({ type: actions.ADD_TODO, todo: this.model });
     this.todoForm.reset();
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.getTodos();
     this.todoForm = this.fb.group({
       title: ['', [Validators.required, Validators.minLength(2)]],
       content: ['', [Validators.required, Validators.minLength(2)]]
     });
-
-
   }
 
 }
