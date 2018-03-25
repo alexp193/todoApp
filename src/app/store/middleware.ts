@@ -13,19 +13,24 @@ export class ProjectsMiddleware {
     Call = () => next => action => {
         switch (action.type) {
             case actions.GET_LIST:
-
                 this.http.get('http://localhost:3000/todos').map(r => r.json()).subscribe(data => {
                     return next({
                         type: actions.SET_LIST,
                         payload: data
                     })
                 });
+                break;
 
+            case actions.GET_MANAGE_LIST:
+                this.http.get('http://localhost:3000/list').map(r => r.json()).subscribe(data => {
+                    return next({
+                        type: actions.SET_MANAGE_LIST,
+                        payload: data
+                    })
+                });
                 break;
 
             case actions.ADD_TODO:
-                console.log(action.todo)
-
                 this.http.post('http://localhost:3000/todos', action.todo).subscribe((response) => {
                     this.http.get('http://localhost:3000/todos').map(r => r.json()).subscribe(data => {
                         return next({
@@ -34,8 +39,8 @@ export class ProjectsMiddleware {
                         })
                     });
                 });
-                break;
 
+                break;
             case actions.UPDATE_LIST:
                 console.log(action.todo)
                 this.http.put(`http://localhost:3000/todos/${action.todo.id}`, action.todo)

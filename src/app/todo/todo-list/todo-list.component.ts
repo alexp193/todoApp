@@ -3,9 +3,11 @@ import { trigger, state, style, transition, animate, keyframes } from '@angular/
 
 
 import { NgRedux } from 'ng2-redux';
-import { IAppState } from '../store/index';
-import { Todos } from '../shared/todos-interface';
-import { actions } from '../store/actions';
+import { IAppState } from '../../store/index';
+import { Todos } from '../../shared/todos-interface';
+import { Lists } from '../../shared/todos-interface';
+
+import { actions } from '../../store/actions';
 
 
 @Component({
@@ -27,60 +29,42 @@ export class TodoListComponent implements OnInit {
 
 
   public todos: Todos[];
+  private list: Lists[];
+  private listId: number;
   state: string = 'extra-large';
-
-
-
-  getState(l) {
-            
-  }
-
-  toggleState() {
-    // this.state = (this.state === 'small' ? 'large' : 'small');
-
-
-  }
-  saveEditable(value) {
-    //call to http service
-    console.log('http.service: ' + value);
-  }
 
   constructor(public ngRedux: NgRedux<IAppState>) {
 
   }
 
-  onBlur(e, item, ) {
-    console.log(e)
-
-    item.content = e.target.innerHTML;
+  onBlur(e, item, keyV) {
+    item[keyV] = e.target.innerHTML;
     this.ngRedux.dispatch({ type: actions.UPDATE_LIST, todo: item });
   }
 
   getTodos() {
+
     this.ngRedux.subscribe(() => {
-      this.todos = this.ngRedux.getState().todos.todos;
-      
-      this.state = "fadeIn"
+      const newList = this.ngRedux.getState().todos.todos;
+      this.listId = this.ngRedux.getState().list.list.id;
+      this.todos = newList.filter(item => item.parentId === this.listId);
+      this.state = "fadeIn";
     })
   }
 
   ToggleChecked(id) {
     let obj = this.todos.find(item => {
-
       if (item.id === id) {
         item.done = !item.done;
         return item.id === id;
       }
-
     });
 
     this.ngRedux.dispatch({ type: actions.UPDATE_LIST, todo: obj });
   }
 
   ngOnInit() {
-
     this.getTodos();
-
   }
 
 

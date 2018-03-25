@@ -1,12 +1,8 @@
 <div class="FormContainer">
   <form novalidate (ngSubmit)="onSubmit(todoForm)" [formGroup]="todoForm">
-
     <input type="text" class="titleInput" name="title" formControlName="title" placeholder="title">
     <input type="text" name="content" formControlName="content" placeholder="content">
     <button type="submit" class="SubButton" [disabled]="todoForm.invalid" style="margin-left: 5px;">Add To List</button>
-
-
   </form>
   <button type="submit" class="del" (click)="DeleteItems()" style="margin-left: 5px;"> Delete </button>
-
 </div>

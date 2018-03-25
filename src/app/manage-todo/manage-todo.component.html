@@ -1,0 +1,8 @@
+<div class="container">
+  <h1 style="text-align:center">Manager</h1>
+  <div class="main">
+    <div class="todo-list" *ngFor="let list of lists" (click)="executeList(list)">
+      {{list.title}}
+    </div>
+  </div>
+</div>
