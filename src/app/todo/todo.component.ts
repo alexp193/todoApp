@@ -4,16 +4,20 @@ import { NgRedux } from 'ng2-redux';
 import { IAppState } from '../store/index';
 import { actions } from '../store/actions';
 import { Lists } from '../shared/todos-interface';
+import { Subscription } from 'rxjs/Subscription';
+
 
 
 @Component({
   selector: 'app-todo',
   templateUrl: './todo.component.html',
   styleUrls: ['./todo.component.scss']
-
 })
+
 export class TodoComponent {
   public title: string = "";
+  private subscriptions: Array<Subscription> = [];
+
 
   constructor(public ngRedux: NgRedux<IAppState>) {
     this.ngRedux = ngRedux;
@@ -32,4 +36,5 @@ export class TodoComponent {
       this.title = this.ngRedux.getState().list.list.title;
     })
   }
+
 }

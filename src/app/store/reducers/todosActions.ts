@@ -24,7 +24,6 @@ export function listReducer(state: Lists | null = initialState, action: any) {
         case actions.SET_MANAGE_LIST:
             return Object.assign({}, state, { list: action.payload });
         case actions.SHOW_TODOS_ITEMS:
-        console.log('action', action);
             return Object.assign({}, state, { list: action.payload });
         default:
             return state;

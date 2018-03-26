@@ -3,7 +3,7 @@ import { Component, OnInit, trigger, state, style, transition, animate, keyframe
 import { NgRedux } from 'ng2-redux';
 import { IAppState } from '../store/index';
 import { actions } from '../store/actions';
-import { Lists } from '../shared/todos-interface';
+import { Lists, Todos } from '../shared/todos-interface';
 import { isArray } from 'util';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
@@ -18,6 +18,8 @@ export class ManageTodoComponent implements OnInit {
 
   public lists: Lists[] = [];
   todoForm: FormGroup;
+  public todos: Todos[];
+
 
   public list: Lists = {
     id: 0,
@@ -37,11 +39,18 @@ export class ManageTodoComponent implements OnInit {
   getLists(): void {
     this.ngRedux.subscribe(() => {
       this.lists = this.ngRedux.getState().list && isArray(this.ngRedux.getState().list.list) ? this.ngRedux.getState().list.list : this.lists;
+      this.todos = this.ngRedux.getState().todos.todos;
     })
   }
 
   deleteList(id: number): void {
     this.ngRedux.dispatch({ type: actions.DELETE_LIST, id: id });
+
+    this.todos.forEach((item) => {
+      if (item.parentId === id) {
+        this.ngRedux.dispatch({ type: actions.DELETE_ITEMS, todo: item });
+      }
+    });
   }
 
   executeList(list: object): void {

@@ -57,7 +57,7 @@ export class TodoFormComponent implements OnInit {
 
   ngOnInit(): void {
     this.getTodos();
-    
+
     this.todoForm = this.fb.group({
       title: ['', [Validators.required, Validators.minLength(2)]],
       content: ['', [Validators.required, Validators.minLength(2)]]

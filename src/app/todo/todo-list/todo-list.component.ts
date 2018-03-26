@@ -58,7 +58,6 @@ export class TodoListComponent implements OnInit {
         return item.id === id;
       }
     });
-
     this.ngRedux.dispatch({ type: actions.UPDATE_LIST, todo: obj });
   }
 
