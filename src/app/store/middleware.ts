@@ -30,6 +30,17 @@ export class ProjectsMiddleware {
                 });
                 break;
 
+            case actions.ADD_LIST:
+                this.http.post('http://localhost:3000/list', action.list).subscribe((response) => {
+                    this.http.get('http://localhost:3000/list').map(r => r.json()).subscribe(data => {
+                        return next({
+                            type: actions.SET_MANAGE_LIST,
+                            payload: data
+                        })
+                    });
+                });
+                break;
+
             case actions.ADD_TODO:
                 this.http.post('http://localhost:3000/todos', action.todo).subscribe((response) => {
                     this.http.get('http://localhost:3000/todos').map(r => r.json()).subscribe(data => {

@@ -9,6 +9,7 @@
 .main {
     text-align: center;
     width: 100%;
+    margin-top:11px;
 }
 
 .list {
@@ -25,6 +26,24 @@
     flex-grow: 1;
 }
 
-.todo-list{
+.todo-list {
     cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+}
+
+.FormContainer {
+    display: flex;
+}
+
+input[type=text] {
+    border: 1px solid grey;
+    border-radius: 4px;
+    width: 40%;
+    padding: 10px;
+}
+
+button {
+    border-radius: 15px;
+    color: blue;
 }

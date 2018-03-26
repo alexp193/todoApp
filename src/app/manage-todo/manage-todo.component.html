@@ -1,8 +1,15 @@
 <div class="container">
   <h1 style="text-align:center">Manager</h1>
+  <div class="FormContainer">
+    <form novalidate (ngSubmit)="onSubmit(todoForm)" [formGroup]="todoForm">
+      <input type="text" class="titleInput" name="title" formControlName="title" placeholder="title" style="margin-right:4px;">
+      <button type="submit" class="SubButton" style="margin-left: 5px;">Add To List</button>
+    </form>
+  </div>
   <div class="main">
     <div class="todo-list" *ngFor="let list of lists" (click)="executeList(list)">
-      {{list.title}}
+      <div> {{list.title}}</div>
+      <button type="submit" class="del" style="margin-left: 5px;"> Delete </button>
     </div>
   </div>
 </div>

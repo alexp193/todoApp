@@ -5,6 +5,9 @@ import { IAppState } from '../store/index';
 import { actions } from '../store/actions';
 import { Lists } from '../shared/todos-interface';
 import { isArray } from 'util';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+
+
 
 @Component({
   selector: 'app-manage-todo',
@@ -14,12 +17,23 @@ import { isArray } from 'util';
 export class ManageTodoComponent implements OnInit {
 
   public lists: Lists[] = [];
+  todoForm: FormGroup;
 
-  constructor(public ngRedux: NgRedux<IAppState>) {
+  public list: Lists = {
+    id: 0,
+    title: ""
+  };
+
+  constructor(public ngRedux: NgRedux<IAppState>,
+    private fb: FormBuilder) {
   }
 
 
-
+  onSubmit({ value, valid }): void {
+    this.list.title = value.title;
+    this.ngRedux.dispatch({ type: actions.ADD_LIST, list: this.list });
+    this.todoForm.reset();
+  }
   getLists(): void {
     this.ngRedux.subscribe(() => {
       this.lists = this.ngRedux.getState().list && isArray(this.ngRedux.getState().list.list) ? this.ngRedux.getState().list.list : this.lists;
@@ -33,6 +47,10 @@ export class ManageTodoComponent implements OnInit {
 
   ngOnInit() {
     this.getLists();
+
+    this.todoForm = this.fb.group({
+      title: ['', [Validators.required, Validators.minLength(2)]]
+    });
   }
 
 }
