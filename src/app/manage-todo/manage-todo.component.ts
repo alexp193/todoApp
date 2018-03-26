@@ -40,6 +40,10 @@ export class ManageTodoComponent implements OnInit {
     })
   }
 
+  deleteList(id: number): void {
+    this.ngRedux.dispatch({ type: actions.DELETE_LIST, id: id });
+  }
+
   executeList(list: object): void {
     this.ngRedux.dispatch({ type: actions.SHOW_TODOS_ITEMS, payload: list });
   }
@@ -47,7 +51,6 @@ export class ManageTodoComponent implements OnInit {
 
   ngOnInit() {
     this.getLists();
-
     this.todoForm = this.fb.group({
       title: ['', [Validators.required, Validators.minLength(2)]]
     });

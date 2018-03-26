@@ -7,9 +7,9 @@
     </form>
   </div>
   <div class="main">
-    <div class="todo-list" *ngFor="let list of lists" (click)="executeList(list)">
-      <div> {{list.title}}</div>
-      <button type="submit" class="del" style="margin-left: 5px;"> Delete </button>
+    <div class="todo-list" *ngFor="let list of lists">
+      <div (click)="executeList(list)"> {{list.title}}</div>
+      <button type="submit" class="del" (click)="deleteList(list.id)" style="margin-left: 5px;"> Delete </button>
     </div>
   </div>
 </div>

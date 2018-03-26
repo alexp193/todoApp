@@ -22,25 +22,11 @@
       "done": false
     },
     {
-      "parentId": 1,
-      "id": 33,
-      "title": "asdasdasd",
-      "content": "asdasdasd",
-      "done": false
-    },
-    {
       "parentId": 2,
       "id": 34,
       "title": "asd",
       "content": "asd",
       "done": false
-    },
-    {
-      "parentId": 4,
-      "id": 36,
-      "title": "asdfadsf",
-      "content": "232323",
-      "done": true
     },
     {
       "parentId": 2,
@@ -52,13 +38,6 @@
     {
       "parentId": 2,
       "id": 38,
-      "title": "asd",
-      "content": "asd",
-      "done": false
-    },
-    {
-      "parentId": 1,
-      "id": 39,
       "title": "asd",
       "content": "asd",
       "done": false
@@ -94,24 +73,16 @@
   ],
   "list": [
     {
-      "id": 1,
-      "title": "My List"
-    },
-    {
-      "id": 2,
-      "title": "List of tasks"
-    },
-    {
       "id": 3,
       "title": "Good List"
     },
     {
       "id": 4,
-      "title": "four list"
+      "title": "asdf"
     },
     {
       "id": 5,
-      "title": "asas"
+      "title": "asdfasdf"
     }
   ]
 }
