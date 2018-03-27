@@ -6,6 +6,7 @@ import { actions } from '../store/actions';
 import { Lists } from '../shared/todos-interface';
 
 
+
 @Component({
   selector: 'app-todo',
   templateUrl: './todo.component.html',
@@ -14,9 +15,8 @@ import { Lists } from '../shared/todos-interface';
 })
 export class TodoComponent {
   public title: string = "";
-
+  private unsubscribe: () => void;
   constructor(public ngRedux: NgRedux<IAppState>) {
-    this.ngRedux = ngRedux;
   }
 
   ngOnInit() {
@@ -28,8 +28,15 @@ export class TodoComponent {
       type: actions.GET_MANAGE_LIST,
     })
 
-    this.ngRedux.subscribe(() => {
+    this.unsubscribe = this.ngRedux.subscribe(() => {
       this.title = this.ngRedux.getState().list.list.title;
     })
+
+  }
+
+  ngOnDestroy() {
+    if (this.unsubscribe) {
+      this.unsubscribe();
+    }
   }
 }

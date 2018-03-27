@@ -12,13 +12,15 @@ import { IAppState } from './store/IAppState';
 import { NgReduxModule, NgRedux } from 'ng2-redux';
 import { ProjectsMiddleware } from './store/middleware';
 import { combineReducers, applyMiddleware } from 'redux';
-import { reducer } from './store/reducers/todosActions';
-import { listReducer } from './store/reducers/todosActions';
+import { reducer } from './store/reducers/reducers';
+import { listReducer } from './store/reducers/reducers';
 import { FormsModule } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { EditableModule } from 'ng2-editable';
 import { TodoComponent } from './todo/todo.component';
 import { ManageTodoComponent } from './manage-todo/manage-todo.component';
+import { AppRoutingModule } from './routing.module';
+
 
 
 @NgModule({
@@ -30,6 +32,7 @@ import { ManageTodoComponent } from './manage-todo/manage-todo.component';
     ManageTodoComponent
   ],
   imports: [
+    AppRoutingModule,
     BrowserModule,
     NgReduxModule,
     HttpModule,

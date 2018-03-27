@@ -1,15 +1,14 @@
 import { actions } from "./actions";
 import { Http, Response } from '@angular/http';
 import { Injectable } from "@angular/core";
-import { Todos } from '../shared/todos-interface'
 
 @Injectable()
 export class ProjectsMiddleware {
-    public todos: Todos[];
 
-    constructor(public http: Http) {
+    constructor(private http: Http) {
 
     }
+
     Call = () => next => action => {
         switch (action.type) {
             case actions.GET_LIST:

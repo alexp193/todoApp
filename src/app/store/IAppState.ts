@@ -1,5 +1,7 @@
+import { Todos, Lists } from "../shared/todos-interface";
+
 export interface IAppState {
-    todos: any,
-    list:any
+    todos: Todos[],
+    list: Lists[]
 }
 

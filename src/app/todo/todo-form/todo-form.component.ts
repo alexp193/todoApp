@@ -28,6 +28,9 @@ export class TodoFormComponent implements OnInit {
     done: false
   };
 
+  private unsubscribe: () => void;
+  
+
 
   constructor(private ngRedux: NgRedux<IAppState>, private fb: FormBuilder) { }
 
@@ -41,7 +44,7 @@ export class TodoFormComponent implements OnInit {
   }
 
   getTodos(): void {
-    this.ngRedux.subscribe(() => {
+    this.unsubscribe = this.ngRedux.subscribe(() => {
       this.todos = this.ngRedux.getState().todos.todos;
       this.listId = this.ngRedux.getState().list.list.id;
     })
@@ -57,11 +60,16 @@ export class TodoFormComponent implements OnInit {
 
   ngOnInit(): void {
     this.getTodos();
-    
+
     this.todoForm = this.fb.group({
       title: ['', [Validators.required, Validators.minLength(2)]],
       content: ['', [Validators.required, Validators.minLength(2)]]
     });
   }
 
+  ngOnDestroy() {
+    if (this.unsubscribe) {
+      this.unsubscribe();
+    }
+  }
 }

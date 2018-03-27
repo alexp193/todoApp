@@ -8,6 +8,7 @@ import { Todos } from '../../shared/todos-interface';
 import { Lists } from '../../shared/todos-interface';
 
 import { actions } from '../../store/actions';
+import { debuglog } from 'util';
 
 
 @Component({
@@ -31,6 +32,7 @@ export class TodoListComponent implements OnInit {
   public todos: Todos[];
   private list: Lists[];
   private listId: number;
+  private unsubscribe: () => void;
   state: string = 'extra-large';
 
   constructor(public ngRedux: NgRedux<IAppState>) {
@@ -38,14 +40,15 @@ export class TodoListComponent implements OnInit {
   }
 
   onBlur(e, item, keyV): void {
+
     item[keyV] = e.target.innerHTML;
     this.ngRedux.dispatch({ type: actions.UPDATE_LIST, todo: item });
   }
 
   getTodos(): void {
-    this.ngRedux.subscribe(() => {
+    this.unsubscribe = this.ngRedux.subscribe(() => {
       const newList = this.ngRedux.getState().todos.todos;
-      this.listId = this.ngRedux.getState().list.list.id;
+      this.listId = this.ngRedux.getState().list.list.id
       this.todos = newList.filter(item => item.parentId === this.listId);
       this.state = "fadeIn";
     })
@@ -60,10 +63,17 @@ export class TodoListComponent implements OnInit {
     });
 
     this.ngRedux.dispatch({ type: actions.UPDATE_LIST, todo: obj });
+
   }
 
   ngOnInit() {
     this.getTodos();
+  }
+
+  ngOnDestroy() {
+    if (this.unsubscribe) {
+      this.unsubscribe();
+    }
   }
 
 

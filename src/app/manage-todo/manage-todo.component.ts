@@ -6,6 +6,11 @@ import { actions } from '../store/actions';
 import { Lists } from '../shared/todos-interface';
 import { isArray } from 'util';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRouteSnapshot, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
+import { debounceTime } from 'rxjs/operator/debounceTime';
+
+
 
 
 
@@ -23,9 +28,12 @@ export class ManageTodoComponent implements OnInit {
     id: 0,
     title: ""
   };
+  private unsubscribe: () => void;
+
 
   constructor(public ngRedux: NgRedux<IAppState>,
-    private fb: FormBuilder) {
+    private fb: FormBuilder,
+    private router: ActivatedRoute) {
   }
 
 
@@ -35,7 +43,7 @@ export class ManageTodoComponent implements OnInit {
     this.todoForm.reset();
   }
   getLists(): void {
-    this.ngRedux.subscribe(() => {
+    this.unsubscribe = this.ngRedux.subscribe(() => {
       this.lists = this.ngRedux.getState().list && isArray(this.ngRedux.getState().list.list) ? this.ngRedux.getState().list.list : this.lists;
     })
   }
@@ -44,7 +52,7 @@ export class ManageTodoComponent implements OnInit {
     this.ngRedux.dispatch({ type: actions.DELETE_LIST, id: id });
   }
 
-  executeList(list: object): void {
+  executeList(list: Lists): void {
     this.ngRedux.dispatch({ type: actions.SHOW_TODOS_ITEMS, payload: list });
   }
 
@@ -54,6 +62,19 @@ export class ManageTodoComponent implements OnInit {
     this.todoForm = this.fb.group({
       title: ['', [Validators.required, Validators.minLength(2)]]
     });
+
+    this.router.params.subscribe(params => {
+
+      console.log(params);
+
+    });
+
+  }
+
+  ngOnDestroy() {
+    if (this.unsubscribe) {
+      this.unsubscribe();
+    }
   }
 
 }
