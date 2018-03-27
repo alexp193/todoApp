@@ -52,7 +52,6 @@ export class ProjectsMiddleware {
 
                 break;
             case actions.UPDATE_LIST:
-                console.log(action.todo)
                 this.http.put(`http://localhost:3000/todos/${action.todo.id}`, action.todo)
                     .subscribe(data => {
                         return next(data)
