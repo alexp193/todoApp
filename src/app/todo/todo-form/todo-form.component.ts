@@ -22,13 +22,14 @@ export class TodoFormComponent implements OnInit {
   private listId: number;
   todoForm: FormGroup;
 
-  private unsubscribe: () => void;
+  private subscribers: any[];
   @select() update$: Observable<number>;
   @select() todos$: Observable<Todos>;
 
 
   constructor(private ngRedux: NgRedux<IAppState>,
     private fb: FormBuilder) {
+    this.subscribers = [];
   }
 
   DeleteItems(): void {
@@ -62,18 +63,17 @@ export class TodoFormComponent implements OnInit {
       content: ['', [Validators.required, Validators.minLength(2)]]
     });
 
-    this.update$.subscribe(data => {
+    this.subscribers.push(this.update$.subscribe(data => {
       this.listId = data;
-    });
+    }));
 
-    this.todos$.subscribe(data => {
+    this.subscribers.push(this.todos$.subscribe(data => {
       this.todos = data;
-    });
+    }));
   }
 
   ngOnDestroy() {
-    if (this.unsubscribe) {
-      this.unsubscribe();
-    }
+    this.subscribers.forEach(subscriber => subscriber.unsubscribe());
   }
+
 }

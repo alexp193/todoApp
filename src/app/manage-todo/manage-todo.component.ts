@@ -35,12 +35,12 @@ export class ManageTodoComponent implements OnInit {
     title: ""
   };
 
-  private unsubscribe: () => void;
-
+  private subscribers: any[];
 
   constructor(public ngRedux: NgRedux<IAppState>,
     private fb: FormBuilder,
     private router: ActivatedRoute) {
+    this.subscribers = [];
   }
 
 
@@ -61,17 +61,17 @@ export class ManageTodoComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.list$.subscribe(data => {
+    this.subscribers.push(this.list$.subscribe(data => {
       if (isArray(data)) {
         this.lists = data;
       }
-    })
+    }))
 
-    this.todos$.subscribe(data => {
+    this.subscribers.push(this.todos$.subscribe(data => {
       if (isArray(data)) {
         this.todos = data;
       }
-    })
+    }))
 
     this.todoForm = this.fb.group({
       title: ['', [Validators.required, Validators.minLength(2)]]
@@ -82,9 +82,7 @@ export class ManageTodoComponent implements OnInit {
   }
 
   ngOnDestroy() {
-    if (this.unsubscribe) {
-      this.unsubscribe();
-    }
+    this.subscribers.forEach(subscriber => subscriber.unsubscribe());
   }
 
 }

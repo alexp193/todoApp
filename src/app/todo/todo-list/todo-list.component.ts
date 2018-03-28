@@ -39,7 +39,7 @@ export class TodoListComponent implements OnInit {
   public newTodos: Todos;
   private listId: any;
 
-  private unsubscribe: () => void;
+  private subscribers: any[];
   state: string = 'extra-large';
 
   @select() todos$: Observable<Todos>;
@@ -49,12 +49,13 @@ export class TodoListComponent implements OnInit {
 
   constructor(public ngRedux: NgRedux<IAppState>,
     private activatedRoute: ActivatedRoute) {
+    this.subscribers = [];
 
     this.activatedRoute.params.subscribe(params => {
 
       this.listId = Number(params.id);
       this.ngRedux.dispatch({ type: actions.UPDATE_ID, id: this.listId });
-      
+
       if (this.todos) {
         this.showTodos();
       }
@@ -91,9 +92,7 @@ export class TodoListComponent implements OnInit {
   }
 
   ngOnDestroy() {
-    if (this.unsubscribe) {
-      this.unsubscribe();
-    }
+    this.subscribers.forEach(subscriber => subscriber.unsubscribe());
   }
 
 

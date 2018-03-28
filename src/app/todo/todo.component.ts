@@ -19,9 +19,10 @@ export class TodoComponent implements OnInit {
 
   @select() list$: Observable<Lists>;
   public title: any;
-  private unsubscribe: () => void;
+  private subscribers: any[];
 
   constructor(public ngRedux: NgRedux<IAppState>) {
+    this.subscribers = [];
   }
 
   ngOnInit() {
@@ -38,10 +39,10 @@ export class TodoComponent implements OnInit {
 
   }
 
+
   ngOnDestroy() {
-    if (this.unsubscribe) {
-      this.unsubscribe();
-    }
+    this.subscribers.forEach(subscriber => subscriber.unsubscribe());
   }
+
 
 }
