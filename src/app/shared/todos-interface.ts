@@ -1,4 +1,4 @@
-export interface Todos {
+export interface Todo {
     parentId: number;
     id?: number;
     title: string;
@@ -6,7 +6,12 @@ export interface Todos {
     done?: boolean;
 }
 
-export interface Lists{
-    id:number,
-    title:string
+
+export interface List {
+    id: number,
+    title: string
 }
+
+export declare type Lists = List[];
+export declare type Todos = Todo[];
+

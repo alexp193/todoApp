@@ -8,8 +8,8 @@
   </div>
   <div class="main">
     <div class="todo-list" *ngFor="let list of lists">
-      <div (click)="executeList(list)">
-        <a [routerLink]="['/todo', list.id]">{{list.title}}</a>
+      <div>
+        <a [routerLink]="['/','todo', list.id]">{{list.title}}</a>
       </div>
       <button type="submit" class="del" (click)="deleteList(list.id)" style="margin-left: 5px;"> Delete </button>
     </div>

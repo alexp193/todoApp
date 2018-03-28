@@ -1,18 +1,21 @@
 import { actions } from "./actions";
-import { Http, Response } from '@angular/http';
 import { Injectable } from "@angular/core";
+import 'rxjs/add/operator/map'
+import { Observable } from "rxjs/Observable";
+import { HttpService } from "../shared/http-service";
+
 
 @Injectable()
+
 export class ProjectsMiddleware {
 
-    constructor(private http: Http) {
-
+    constructor(private httpSrv: HttpService) {
     }
 
     Call = () => next => action => {
         switch (action.type) {
             case actions.GET_LIST:
-                this.http.get('http://localhost:3000/todos').map(r => r.json()).subscribe(data => {
+                this.httpSrv.get('todos').subscribe(data => {
                     return next({
                         type: actions.SET_LIST,
                         payload: data
@@ -21,17 +24,16 @@ export class ProjectsMiddleware {
                 break;
 
             case actions.GET_MANAGE_LIST:
-                this.http.get('http://localhost:3000/list').map(r => r.json()).subscribe(data => {
+                this.httpSrv.get('list').subscribe(data => {
                     return next({
                         type: actions.SET_MANAGE_LIST,
                         payload: data
                     })
                 });
                 break;
-
             case actions.ADD_LIST:
-                this.http.post('http://localhost:3000/list', action.list).subscribe((response) => {
-                    this.http.get('http://localhost:3000/list').map(r => r.json()).subscribe(data => {
+                this.httpSrv.post('list', action.list).subscribe((response) => {
+                    this.httpSrv.get('list').subscribe(data => {
                         return next({
                             type: actions.SET_MANAGE_LIST,
                             payload: data
@@ -39,29 +41,27 @@ export class ProjectsMiddleware {
                     });
                 });
                 break;
-
             case actions.ADD_TODO:
-                this.http.post('http://localhost:3000/todos', action.todo).subscribe((response) => {
-                    this.http.get('http://localhost:3000/todos').map(r => r.json()).subscribe(data => {
+                this.httpSrv.post('todos', action.todo).subscribe((response) => {
+                    this.httpSrv.get('todos').subscribe(data => {
                         return next({
                             type: actions.SET_LIST,
                             payload: data
                         })
                     });
                 });
-
                 break;
             case actions.UPDATE_LIST:
-                this.http.put(`http://localhost:3000/todos/${action.todo.id}`, action.todo)
+                this.httpSrv.put('todos', action.todo.id, action.todo)
                     .subscribe(data => {
                         return next(data)
                     }, error => console.log('Could not update todo.'));
-
                 break;
+
             case actions.DELETE_ITEMS:
-                this.http.delete(`http://localhost:3000/todos/${action.todo.id}`)
+                this.httpSrv.delete('todos', action.todo.id)
                     .subscribe((response) => {
-                        this.http.get('http://localhost:3000/todos').map(r => r.json()).subscribe(data => {
+                        this.httpSrv.get('todos').subscribe(data => {
                             return next({
                                 type: actions.SET_LIST,
                                 payload: data
@@ -71,9 +71,9 @@ export class ProjectsMiddleware {
                 break;
 
             case actions.DELETE_LIST:
-                this.http.delete(`http://localhost:3000/list/${action.id}`)
+                this.httpSrv.delete('list', action.id)
                     .subscribe((response) => {
-                        this.http.get('http://localhost:3000/list').map(r => r.json()).subscribe(data => {
+                        this.httpSrv.get('list').subscribe(data => {
                             return next({
                                 type: actions.SET_MANAGE_LIST,
                                 payload: data

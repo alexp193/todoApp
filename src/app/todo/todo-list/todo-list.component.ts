@@ -2,13 +2,17 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { trigger, state, style, transition, animate, keyframes } from '@angular/core';
 
 
-import { NgRedux } from 'ng2-redux';
+import { NgRedux, select } from '@angular-redux/store';
+
 import { IAppState } from '../../store/index';
 import { Todos } from '../../shared/todos-interface';
 import { Lists } from '../../shared/todos-interface';
 
 import { actions } from '../../store/actions';
-import { debuglog } from 'util';
+import { debuglog, isArray, isObject } from 'util';
+import { Observable } from 'rxjs/Observable';
+import { PACKAGE_ROOT_URL } from '@angular/core/src/application_tokens';
+import { ActivatedRoute } from '@angular/router';
 
 
 @Component({
@@ -26,32 +30,41 @@ import { debuglog } from 'util';
     ])
   ]
 })
+
 export class TodoListComponent implements OnInit {
 
 
-  public todos: Todos[];
-  private list: Lists[];
-  private listId: number;
+  public todos: Todos;
+  public list: Lists;
+  public newTodos: Todos;
+  private listId: any;
+
   private unsubscribe: () => void;
   state: string = 'extra-large';
 
-  constructor(public ngRedux: NgRedux<IAppState>) {
+  @select() todos$: Observable<Todos>;
+  @select() list$: Observable<Lists>;
+  @select() update$: Observable<Lists>;
+
+
+  constructor(public ngRedux: NgRedux<IAppState>,
+    private activatedRoute: ActivatedRoute) {
+
+    this.activatedRoute.params.subscribe(params => {
+
+      this.listId = Number(params.id);
+      this.ngRedux.dispatch({ type: actions.UPDATE_ID, id: this.listId });
+      
+      if (this.todos) {
+        this.showTodos();
+      }
+    });
 
   }
 
   onBlur(e, item, keyV): void {
-
     item[keyV] = e.target.innerHTML;
     this.ngRedux.dispatch({ type: actions.UPDATE_LIST, todo: item });
-  }
-
-  getTodos(): void {
-    this.unsubscribe = this.ngRedux.subscribe(() => {
-      const newList = this.ngRedux.getState().todos.todos;
-      this.listId = this.ngRedux.getState().list.list.id
-      this.todos = newList.filter(item => item.parentId === this.listId);
-      this.state = "fadeIn";
-    })
   }
 
   ToggleChecked(id: number): any {
@@ -62,11 +75,19 @@ export class TodoListComponent implements OnInit {
       }
     });
     this.ngRedux.dispatch({ type: actions.UPDATE_LIST, todo: obj });
-
   }
 
   ngOnInit() {
-    this.getTodos();
+    this.todos$.subscribe(data => {
+      this.newTodos = data;
+      this.showTodos();
+    });
+
+
+  }
+
+  showTodos() {
+    this.todos = this.newTodos.filter(item => item.parentId === this.listId);
   }
 
   ngOnDestroy() {

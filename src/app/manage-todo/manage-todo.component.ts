@@ -1,6 +1,6 @@
 
 import { Component, OnInit, trigger, state, style, transition, animate, keyframes } from '@angular/core';
-import { NgRedux } from 'ng2-redux';
+import { NgRedux, select } from '@angular-redux/store';
 import { IAppState } from '../store/index';
 import { actions } from '../store/actions';
 import { Lists, Todos } from '../shared/todos-interface';
@@ -9,6 +9,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRouteSnapshot, Router } from '@angular/router';
 import { ActivatedRoute } from '@angular/router';
 import { debounceTime } from 'rxjs/operator/debounceTime';
+import { Observable } from 'rxjs/Observable';
 
 
 
@@ -21,15 +22,19 @@ import { debounceTime } from 'rxjs/operator/debounceTime';
 })
 export class ManageTodoComponent implements OnInit {
 
-  public lists: Lists[] = [];
+  public lists: Lists = [];
   todoForm: FormGroup;
-  public todos: Todos[];
+  public todos: Todos = [];
+
+  @select('list') list$: Observable<Lists>;
+  @select('todos') todos$: Observable<Todos>;
 
 
-  public list: Lists = {
+  public list = {
     id: 0,
     title: ""
   };
+
   private unsubscribe: () => void;
 
 
@@ -44,12 +49,6 @@ export class ManageTodoComponent implements OnInit {
     this.ngRedux.dispatch({ type: actions.ADD_LIST, list: this.list });
     this.todoForm.reset();
   }
-  getLists(): void {
-    this.unsubscribe = this.ngRedux.subscribe(() => {
-      this.lists = this.ngRedux.getState().list && isArray(this.ngRedux.getState().list.list) ? this.ngRedux.getState().list.list : this.lists;
-      this.todos = this.ngRedux.getState().todos.todos;
-    })
-  }
 
   deleteList(id: number): void {
     this.ngRedux.dispatch({ type: actions.DELETE_LIST, id: id });
@@ -61,22 +60,24 @@ export class ManageTodoComponent implements OnInit {
     });
   }
 
-  executeList(list: Lists): void {
-    this.ngRedux.dispatch({ type: actions.SHOW_TODOS_ITEMS, payload: list });
-  }
-
-
   ngOnInit() {
-    this.getLists();
+    this.list$.subscribe(data => {
+      if (isArray(data)) {
+        this.lists = data;
+      }
+    })
+
+    this.todos$.subscribe(data => {
+      if (isArray(data)) {
+        this.todos = data;
+      }
+    })
+
     this.todoForm = this.fb.group({
       title: ['', [Validators.required, Validators.minLength(2)]]
     });
 
-    this.router.params.subscribe(params => {
 
-      console.log(params);
-
-    });
 
   }
 

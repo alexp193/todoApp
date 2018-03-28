@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { TodoComponent } from './todo/todo.component';
 import { AppComponent } from './app.component';
+import { TodoListComponent } from './todo/todo-list/todo-list.component';
 
 const routes: Routes = [
     {
@@ -11,12 +12,13 @@ const routes: Routes = [
     },
     {
         path: 'todo',
-        component: TodoComponent
+        component: TodoComponent,
+        children: [{
+            path: ':id',
+            component: TodoListComponent
+        }]
     },
-    {
-        path: 'todo/:id',
-        component: TodoComponent
-    }
+
 ];
 
 @NgModule({

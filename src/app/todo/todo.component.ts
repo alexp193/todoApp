@@ -1,13 +1,13 @@
 
 import { Component, OnInit, trigger, state, style, transition, animate, keyframes } from '@angular/core';
-import { NgRedux } from 'ng2-redux';
+import { NgRedux } from '@angular-redux/store';
 import { IAppState } from '../store/index';
 import { actions } from '../store/actions';
-import { Lists } from '../shared/todos-interface';
+import { Lists, Todos } from '../shared/todos-interface';
 import { Subscription } from 'rxjs/Subscription';
-
-
-
+import { select } from '@angular-redux/store';
+import { Observable } from 'rxjs/Observable';
+import { debug } from 'util';
 
 @Component({
   selector: 'app-todo',
@@ -15,15 +15,12 @@ import { Subscription } from 'rxjs/Subscription';
   styleUrls: ['./todo.component.scss']
 })
 
-export class TodoComponent {
-  public title: string = "";
-<<<<<<< HEAD
+export class TodoComponent implements OnInit {
+
+  @select() list$: Observable<Lists>;
+  public title: any;
   private unsubscribe: () => void;
-=======
-  private subscriptions: Array<Subscription> = [];
 
-
->>>>>>> 6352bd3e29f5ea48d8ce4a6452b38ff5ed66a40f
   constructor(public ngRedux: NgRedux<IAppState>) {
   }
 
@@ -36,8 +33,7 @@ export class TodoComponent {
       type: actions.GET_MANAGE_LIST,
     })
 
-    this.unsubscribe = this.ngRedux.subscribe(() => {
-      this.title = this.ngRedux.getState().list.list.title;
+    this.list$.subscribe(data => {
     })
 
   }

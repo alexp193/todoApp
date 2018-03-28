@@ -1,4 +1,7 @@
-import { Component} from '@angular/core';
+import { Component } from '@angular/core';
+import { NgRedux } from '@angular-redux/store';
+import { IAppState } from './store/IAppState';
+
 
 @Component({
   selector: 'app-root',
@@ -9,7 +12,7 @@ import { Component} from '@angular/core';
 export class AppComponent {
 
 
-  constructor() {
+  constructor(private ngRedux: NgRedux<IAppState>) {
 
   }
 
